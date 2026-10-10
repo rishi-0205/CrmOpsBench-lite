@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Secrets
+.env
+
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Testing and linting caches
+.pytest_cache/
+.ruff_cache/
+
+# Harbor trial runs and job artifacts
+jobs/
+results/runs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
