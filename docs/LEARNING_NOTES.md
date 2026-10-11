@@ -37,3 +37,14 @@ We wrote `docs/DESIGN.md` defining our exact 12-user, 6-group, 25-membership, an
 
 ### What We Built and Why
 We implemented the task sandbox inside `tasks/offboard-departed-employee/`. We wrote the seed CSV files and policy in `environment/data/`, created the agent prompt in `instruction.md`, and authored a non-root `Dockerfile` based on `python:3.12-slim-bookworm`. Finally, we proved via `docker run` that the container runs as `agent` and that neither `/tests` nor `/solution` exist in the image while the agent works.
+
+---
+
+## Phase 3: Tooling and Verifier Implementation
+
+### Glossary
+- **Deterministic State Verifier:** A programmatic evaluation script that inspects filesystem records directly against ground truth, avoiding stochastic LLM judges.
+- **Pure Verification Functions:** Self-contained check functions that take directory paths as explicit parameters and return booleans without side effects, enabling rapid host-side testing.
+
+### What We Built and Why
+We built `pyproject.toml` to configure `ruff` and link `pytest` to `tasks/.../tests`. We established immutable reference baselines in `tests/seed/` and `tests/expected/`. Finally, we authored `checks.py` containing 10 pure verification checks and a fail-closed `main()` entrypoint executed by `test.sh`. This produces `/logs/verifier/reward.txt` and diagnostic report `/logs/verifier/checks.json`.

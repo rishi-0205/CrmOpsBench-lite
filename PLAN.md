@@ -314,18 +314,18 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 
 ### Phase 3: Tooling and Verifier Implementation (Budget: 40 min)
 **Done when:** `pyproject.toml` is configured, `checks.py` has parameterizable paths, 10 pure checks (with keyed row comparison), and fail-closed `main()`, `tests/seed/` and `tests/expected/` are populated, `test.sh` exits 0 while writing `reward.txt` and `checks.json`, and verifier user access to `/app/data` and `/logs/verifier` is verified; committed and pushed.
-- [>] Step 3.0: Create `pyproject.toml` with `ruff` and `pytest` configurations.
-- [ ] Step 3.1: Copy pristine seed files and `policy.md` to `tasks/.../tests/seed/`.
-- [ ] Step 3.2: Create ground-truth files in `tasks/.../tests/expected/`.
-- [ ] Step 3.3: Implement `checks.py` with parameterizable paths, 10 pure checks, and fail-closed `main()`.
-- [ ] Step 3.4: Implement `test.sh`, confirm verifier execution user, and verify read access to `/app/data` and write access to `/logs/verifier`.
-- [ ] Step 3.5: docs/LEARNING_NOTES.md Phase 3 summary ("what we built and why"), propose commit, commit, and push.
+- [x] Step 3.0: Create `pyproject.toml` with `ruff` and `pytest` configurations.
+- [x] Step 3.1: Copy pristine seed files and `policy.md` to `tasks/.../tests/seed/`.
+- [x] Step 3.2: Create ground-truth files in `tasks/.../tests/expected/`.
+- [x] Step 3.3: Implement `checks.py` with parameterizable paths, 10 pure checks, and fail-closed `main()`.
+- [x] Step 3.4: Implement `test.sh`, confirm verifier execution user, and verify read access to `/app/data` and write access to `/logs/verifier`.
+- [x] Step 3.5: docs/LEARNING_NOTES.md Phase 3 summary ("what we built and why"), propose commit, commit, and push.
 
 ---
 
 ### Phase 4: Proof, Self-Tests, Oracle, and No-Op (Budget: 35 min)
 **Done when:** All `verifier_selftests` pass (seed integrity, programmatic oracle logic, and 10 failure cases asserting exact check sets or fail-closed errors), manual oracle and no-op runs complete, `/tests` visibility is checked in logs, `scripts/check_results.py` is written to match actual output layout and asserts oracle=1 / nop=0; committed and pushed.
-- [ ] Step 4.1: Implement `verifier_selftests/test_seed_integrity.py` (checks `environment/data` vs `tests/seed`).
+- [>] Step 4.1: Implement `verifier_selftests/test_seed_integrity.py` (checks `environment/data` vs `tests/seed`).
 - [ ] Step 4.2: Implement `verifier_selftests/test_oracle_logic.py` (programmatically applies intended changes and compares to `expected/`).
 - [ ] Step 4.3: Implement `verifier_selftests/test_verifier_cases.py` (asserts exact check sets for mutations and fail-closed behavior for missing/malformed).
 - [ ] Step 4.4: Implement `tasks/.../solution/solve.sh` (edits `/app/data` with real commands, no copying from `expected`).

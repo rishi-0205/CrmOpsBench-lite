@@ -1,0 +1,13 @@
+id,name,email,status,manager_id
+u-001,Priya Sharma,priya.sharma@acme.example,disabled,u-002
+u-002,Alex Chen,alex.chen@acme.example,active,u-012
+u-003,Marcus Vance,marcus.vance@acme.example,active,u-012
+u-004,Jordan Lee,jordan.lee@acme.example,active,u-002
+u-005,Sam Rivera,sam.rivera@acme.example,active,u-002
+u-006,Danielle Kim,danielle.kim@acme.example,active,u-003
+u-007,Priya Sharma,priya.sharma2@acme.example,active,u-003
+u-008,Carlos Mendez,carlos.mendez@acme.example,active,u-006
+u-009,Aisha Patel,aisha.patel@acme.example,active,u-006
+u-010,Taylor Swift,taylor.swift@acme.example,disabled,u-002
+u-011,Liam O'Connor,liam.oconnor@acme.example,active,u-003
+u-012,Elena Rostova,elena.rostova@acme.example,active,
