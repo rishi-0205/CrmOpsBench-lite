@@ -274,35 +274,35 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 - [x] Check Git version (Git 2.41.0 confirmed).
 - [x] Create `.gitignore`.
 - [x] Create live `PLAN.md`.
-- [>] Step 0.1: Create Python virtual environment (`.venv`).
-- [ ] Step 0.2: Activate virtual environment and verify Python path.
-- [ ] Step 0.3: Create `.gitattributes` (`* text=auto eol=lf`).
-- [ ] Step 0.4: Initialize Git repository (`git init`).
-- [ ] Step 0.5: Check Docker installation, daemon status, Linux containers mode, and WSL2 backend.
-- [ ] Step 0.6: Run `pip index versions harbor` to confirm versions, install Harbor, and explain pip vs. uv.
-- [ ] Step 0.7: Create `requirements-dev.txt` (pinned harbor, pytest, ruff) and `requirements-ci.txt` (pinned pytest, ruff only).
-- [ ] Step 0.8: Run Harbor hello-world (using `-a oracle` if model key needed; decide on Windows native vs. WSL2 Ubuntu fallback).
-- [ ] Step 0.9: Run `harbor task init` on a temporary test task *outside the repo*, inspect generated files, and delete it.
-- [ ] Step 0.10: Create private GitHub repository and set up remote origin.
-- [ ] Step 0.11: docs/LEARNING_NOTES.md Phase 0 summary ("what we built and why").
-- [ ] Step 0.12: Confirm `git status` shows no `.env`, `.venv`, or `jobs/`; propose and execute initial commit; push to GitHub.
+- [x] Step 0.1: Create Python virtual environment (`.venv`).
+- [x] Step 0.2: Activate virtual environment and verify Python path.
+- [x] Step 0.3: Create `.gitattributes` (`* text=auto eol=lf`).
+- [x] Step 0.4: Initialize Git repository (`git init`).
+- [x] Step 0.5: Check Docker installation, daemon status, Linux containers mode, and WSL2 backend.
+- [x] Step 0.6: Run `pip index versions harbor` to confirm versions, install Harbor, and explain pip vs. uv.
+- [x] Step 0.7: Create `requirements-dev.txt` (pinned harbor, pytest, ruff) and `requirements-ci.txt` (pinned pytest, ruff only).
+- [x] Step 0.8: Run Harbor hello-world (using `-a oracle` if model key needed; decide on Windows native vs. WSL2 Ubuntu fallback).
+- [x] Step 0.9: Run `harbor task init` on a temporary test task *outside the repo*, inspect generated files, and delete it.
+- [x] Step 0.10: Create private GitHub repository and set up remote origin.
+- [x] Step 0.11: docs/LEARNING_NOTES.md Phase 0 summary ("what we built and why").
+- [x] Step 0.12: Confirm `git status` shows no `.env`, `.venv`, or `jobs/`; propose and execute initial commit; push to GitHub.
 
 ---
 
 ### Phase 1: Task Design and Specification (Budget: 20 min)
 **Done when:** `docs/DESIGN.md` contains full seed tables, policy rules, expected final state, exact derived failing check sets per trap; user approves; Phase 1 summary is recorded in `docs/LEARNING_NOTES.md`; committed and pushed.
-- [ ] Step 1.1: Design seed data rows (12 users, 6 groups, 25 memberships, 8 licenses) with exact keys and relationships.
-- [ ] Step 1.2: Design intentional traps and derive the exact set of failing check names for each mutation in `docs/DESIGN.md`.
-- [ ] Step 1.3: Define policy rules (`policy.md`) and concise agent prompt (`instruction.md`).
-- [ ] Step 1.4: Define exact expected ground-truth final state.
-- [ ] Step 1.5: Write `docs/DESIGN.md` and review with user.
-- [ ] Step 1.6: docs/LEARNING_NOTES.md Phase 1 summary ("what we built and why"), propose commit, commit, and push.
+- [x] Step 1.1: Design seed data rows (12 users, 6 groups, 25 memberships, 8 licenses) with exact keys and relationships.
+- [x] Step 1.2: Design intentional traps and derive the exact set of failing check names for each mutation in `docs/DESIGN.md`.
+- [x] Step 1.3: Define policy rules (`policy.md`) and concise agent prompt (`instruction.md`).
+- [x] Step 1.4: Define exact expected ground-truth final state.
+- [x] Step 1.5: Write `docs/DESIGN.md` and review with user.
+- [x] Step 1.6: docs/LEARNING_NOTES.md Phase 1 summary ("what we built and why"), propose commit, commit, and push.
 
 ---
 
 ### Phase 2: Environment and World Setup (Budget: 30 min)
 **Done when:** Seed files exist in `environment/data/`, `Dockerfile` builds cleanly with Python 3.12 and non-root `agent` user owning `/app/data`, `task.toml` has conservative timeouts and metadata, container is inspected interactively, agent user is proven unable to read `/tests` or `/solution` via `docker run`; committed and pushed.
-- [ ] Step 2.1: Write seed data files into `tasks/offboard-departed-employee/environment/data/`.
+- [>] Step 2.1: Write seed data files into `tasks/offboard-departed-employee/environment/data/`.
 - [ ] Step 2.2: Write `policy.md` and `instruction.md`.
 - [ ] Step 2.3: Write `Dockerfile` with Python 3.12, unprivileged user `agent` (UID 1000), and `chown -R agent:agent /app/data`.
 - [ ] Step 2.4: Write `task.toml` with conservative timeouts (`verifier = 120s`, `agent = 300s`), agent user, and required metadata from Harbor docs.
