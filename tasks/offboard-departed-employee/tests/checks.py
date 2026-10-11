@@ -156,56 +156,70 @@ def check_no_collateral_changes(data_dir: Path, seed_dir: Path) -> bool:
     current_users = read_users(data_dir)
     seed_users = read_users(seed_dir)
 
-    # All users except departed Priya status and lookalike Priya (covered by check 8)
-    if set(current_users.keys()) != set(seed_users.keys()):
+    # All users except departed Priya (covered by user_row_kept) and lookalike Priya (covered by check 8)
+    cur_user_keys = set(current_users.keys()) - {DEPARTED_USER_ID, LOOKALIKE_USER_ID}
+    seed_user_keys = set(seed_users.keys()) - {DEPARTED_USER_ID, LOOKALIKE_USER_ID}
+    if cur_user_keys != seed_user_keys:
         return False
 
     for uid, seed_row in seed_users.items():
         if uid == LOOKALIKE_USER_ID:
             continue
-        cur_row = current_users[uid]
         if uid == DEPARTED_USER_ID:
-            # For Priya: only status is allowed to change; name, email, manager_id must match seed
-            for field in ("name", "email", "manager_id"):
-                if cur_row.get(field) != seed_row.get(field):
-                    return False
+            # If Priya exists, invariant fields must match seed
+            if DEPARTED_USER_ID in current_users:
+                cur_row = current_users[DEPARTED_USER_ID]
+                for field in ("name", "email", "manager_id"):
+                    if cur_row.get(field) != seed_row.get(field):
+                        return False
         else:
-            if cur_row != seed_row:
+            if current_users[uid] != seed_row:
                 return False
 
-    # All groups: only g-001 owner_id is allowed to change
+    # All groups: g-001 is covered by all_groups_kept and owned_group_reassigned_to_manager
     current_groups = read_groups(data_dir)
     seed_groups = read_groups(seed_dir)
-    if set(current_groups.keys()) != set(seed_groups.keys()):
+    cur_group_keys = set(current_groups.keys()) - {OWNED_GROUP_ID}
+    seed_group_keys = set(seed_groups.keys()) - {OWNED_GROUP_ID}
+    if cur_group_keys != seed_group_keys:
         return False
+
     for gid, seed_row in seed_groups.items():
-        cur_row = current_groups[gid]
         if gid == OWNED_GROUP_ID:
-            if cur_row.get("name") != seed_row.get("name"):
-                return False
+            if OWNED_GROUP_ID in current_groups:
+                if current_groups[OWNED_GROUP_ID].get("name") != seed_row.get("name"):
+                    return False
         else:
-            if cur_row != seed_row:
+            if current_groups[gid] != seed_row:
                 return False
 
-    # All licenses: only lic-001 assigned_to is allowed to change
+    # All licenses: lic-001 is covered by license_row_kept and license_released
     current_licenses = read_licenses(data_dir)
     seed_licenses = read_licenses(seed_dir)
-    if set(current_licenses.keys()) != set(seed_licenses.keys()):
+    cur_license_keys = set(current_licenses.keys()) - {PRIYA_LICENSE_ID}
+    seed_license_keys = set(seed_licenses.keys()) - {PRIYA_LICENSE_ID}
+    if cur_license_keys != seed_license_keys:
         return False
+
     for lid, seed_row in seed_licenses.items():
-        cur_row = current_licenses[lid]
         if lid == PRIYA_LICENSE_ID:
-            if cur_row.get("sku") != seed_row.get("sku"):
-                return False
+            if PRIYA_LICENSE_ID in current_licenses:
+                if current_licenses[PRIYA_LICENSE_ID].get("sku") != seed_row.get("sku"):
+                    return False
         else:
-            if cur_row != seed_row:
+            if current_licenses[lid] != seed_row:
                 return False
 
-    # Memberships: exactly INTENDED_REMOVED_MEMBERSHIPS removed from seed
+    # Memberships: all non-departed user memberships must match seed exactly
     current_memberships = read_memberships(data_dir)
     seed_memberships = read_memberships(seed_dir)
-    expected_memberships = seed_memberships - INTENDED_REMOVED_MEMBERSHIPS
-    if current_memberships != expected_memberships:
+    current_non_departed = {
+        (uid, gid) for uid, gid in current_memberships if uid != DEPARTED_USER_ID
+    }
+    seed_non_departed = {
+        (uid, gid) for uid, gid in seed_memberships if uid != DEPARTED_USER_ID
+    }
+    if current_non_departed != seed_non_departed:
         return False
 
     return True

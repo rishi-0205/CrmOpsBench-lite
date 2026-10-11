@@ -48,3 +48,16 @@ We implemented the task sandbox inside `tasks/offboard-departed-employee/`. We w
 
 ### What We Built and Why
 We built `pyproject.toml` to configure `ruff` and link `pytest` to `tasks/.../tests`. We established immutable reference baselines in `tests/seed/` and `tests/expected/`. Finally, we authored `checks.py` containing 10 pure verification checks and a fail-closed `main()` entrypoint executed by `test.sh`. This produces `/logs/verifier/reward.txt` and diagnostic report `/logs/verifier/checks.json`.
+
+---
+
+## Phase 4: Proof, Self-Tests, Oracle, and No-Op
+
+### Glossary
+- **Explainable Verification vs. Scalar Reward:** A scalar reward (0.0 or 1.0) provides a summary metric for benchmark pass rates, whereas structured diagnostic logs (`checks.json`) isolate the exact step and broken invariant, enabling granular failure analysis.
+- **`.PHONY` Target in Make:** Declares that a target represents a named action rather than a disk file, ensuring Make always runs the commands even if a file or directory with that name exists.
+
+### What We Built and Why
+We proved the verifier is robust and the task is solvable before running any AI agent. We implemented host-side test suites in `verifier_selftests/` verifying seed integrity byte-for-byte, verifying programmatic oracle transformations against ground truth, and testing all 10 failure mutations against their exact derived check sets (along with fail-closed missing/malformed file handling). We authored the reference solution `solve.sh` and ran live Harbor trials inside Docker, confirming the oracle scored 1.0 and the no-op scored 0.0. Finally, we created `scripts/check_results.py` and `Makefile` to dynamically audit job outputs and automate baseline assertions.
+
+

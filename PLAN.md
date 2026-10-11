@@ -325,15 +325,15 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 
 ### Phase 4: Proof, Self-Tests, Oracle, and No-Op (Budget: 35 min)
 **Done when:** All `verifier_selftests` pass (seed integrity, programmatic oracle logic, and 10 failure cases asserting exact check sets or fail-closed errors), manual oracle and no-op runs complete, `/tests` visibility is checked in logs, `scripts/check_results.py` is written to match actual output layout and asserts oracle=1 / nop=0; committed and pushed.
-- [>] Step 4.1: Implement `verifier_selftests/test_seed_integrity.py` (checks `environment/data` vs `tests/seed`).
-- [ ] Step 4.2: Implement `verifier_selftests/test_oracle_logic.py` (programmatically applies intended changes and compares to `expected/`).
-- [ ] Step 4.3: Implement `verifier_selftests/test_verifier_cases.py` (asserts exact check sets for mutations and fail-closed behavior for missing/malformed).
-- [ ] Step 4.4: Implement `tasks/.../solution/solve.sh` (edits `/app/data` with real commands, no copying from `expected`).
-- [ ] Step 4.5: Run Oracle and No-Op manually, inspect `jobs/` output layout, and verify `/tests` appeared only during verification.
-- [ ] Step 4.6: Implement `scripts/check_results.py` to match real Harbor output layout (asserts oracle=1, nop=0, builds summary).
-- [ ] Step 4.7: Configure `Makefile` with prerequisite-based `check` and plain Windows commands.
-- [ ] Step 4.8: Run `pytest verifier_selftests/` and `make check` to verify green.
-- [ ] Step 4.9: docs/LEARNING_NOTES.md Phase 4 summary ("what we built and why"), propose commit, commit, and push.
+- [x] Step 4.1: Implement `verifier_selftests/test_seed_integrity.py` (checks `environment/data` vs `tests/seed`).
+- [x] Step 4.2: Implement `verifier_selftests/test_oracle_logic.py` (programmatically applies intended changes and compares to `expected/`).
+- [x] Step 4.3: Implement `verifier_selftests/test_verifier_cases.py` (asserts exact check sets for mutations and fail-closed behavior for missing/malformed).
+- [x] Step 4.4: Implement `tasks/.../solution/solve.sh` (edits `/app/data` with real commands, no copying from `expected`).
+- [x] Step 4.5: Run Oracle and No-Op manually, inspect `jobs/` output layout, and verify `/tests` appeared only during verification.
+- [x] Step 4.6: Implement `scripts/check_results.py` to match real Harbor output layout (asserts oracle=1, nop=0, builds summary).
+- [x] Step 4.7: Configure `Makefile` with prerequisite-based `check` and plain Windows commands.
+- [x] Step 4.8: Run `pytest verifier_selftests/` and `make check` to verify green.
+- [x] Step 4.9: docs/LEARNING_NOTES.md Phase 4 summary ("what we built and why"), propose commit, commit, and push.
 
 ---
 
