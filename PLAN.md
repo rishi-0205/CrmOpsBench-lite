@@ -302,19 +302,19 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 
 ### Phase 2: Environment and World Setup (Budget: 30 min)
 **Done when:** Seed files exist in `environment/data/`, `Dockerfile` builds cleanly with Python 3.12 and non-root `agent` user owning `/app/data`, `task.toml` has conservative timeouts and metadata, container is inspected interactively, agent user is proven unable to read `/tests` or `/solution` via `docker run`; committed and pushed.
-- [>] Step 2.1: Write seed data files into `tasks/offboard-departed-employee/environment/data/`.
-- [ ] Step 2.2: Write `policy.md` and `instruction.md`.
-- [ ] Step 2.3: Write `Dockerfile` with Python 3.12, unprivileged user `agent` (UID 1000), and `chown -R agent:agent /app/data`.
-- [ ] Step 2.4: Write `task.toml` with conservative timeouts (`verifier = 120s`, `agent = 300s`), agent user, and required metadata from Harbor docs.
-- [ ] Step 2.5: Build Docker container and inspect `/app/data` inside.
-- [ ] Step 2.6: Use `docker run` as user `agent` to prove `/tests` and `/solution` do not exist in the image while the agent works.
-- [ ] Step 2.7: docs/LEARNING_NOTES.md Phase 2 summary ("what we built and why"), propose commit, commit, and push.
+- [x] Step 2.1: Write seed data files into `tasks/offboard-departed-employee/environment/data/`.
+- [x] Step 2.2: Write `policy.md` and `instruction.md`.
+- [x] Step 2.3: Write `Dockerfile` with Python 3.12, unprivileged user `agent` (UID 1000), and `chown -R agent:agent /app/data`.
+- [x] Step 2.4: Write `task.toml` with conservative timeouts (`verifier = 120s`, `agent = 300s`), agent user, and required metadata from Harbor docs.
+- [x] Step 2.5: Build Docker container and inspect `/app/data` inside.
+- [x] Step 2.6: Use `docker run` as user `agent` to prove `/tests` and `/solution` do not exist in the image while the agent works.
+- [x] Step 2.7: docs/LEARNING_NOTES.md Phase 2 summary ("what we built and why"), propose commit, commit, and push.
 
 ---
 
 ### Phase 3: Tooling and Verifier Implementation (Budget: 40 min)
 **Done when:** `pyproject.toml` is configured, `checks.py` has parameterizable paths, 10 pure checks (with keyed row comparison), and fail-closed `main()`, `tests/seed/` and `tests/expected/` are populated, `test.sh` exits 0 while writing `reward.txt` and `checks.json`, and verifier user access to `/app/data` and `/logs/verifier` is verified; committed and pushed.
-- [ ] Step 3.0: Create `pyproject.toml` with `ruff` and `pytest` configurations.
+- [>] Step 3.0: Create `pyproject.toml` with `ruff` and `pytest` configurations.
 - [ ] Step 3.1: Copy pristine seed files and `policy.md` to `tasks/.../tests/seed/`.
 - [ ] Step 3.2: Create ground-truth files in `tasks/.../tests/expected/`.
 - [ ] Step 3.3: Implement `checks.py` with parameterizable paths, 10 pure checks, and fail-closed `main()`.

@@ -26,3 +26,14 @@ We established our project baseline on Windows 11 using PowerShell and Docker De
 
 ### What We Built and Why
 We wrote `docs/DESIGN.md` defining our exact 12-user, 6-group, 25-membership, and 8-license seed dataset. We formalized the 5-rule policy, the agent prompt, and the 10-check verifier rubric. Crucially, we reasoned through each failure trap to derive the exact set of failing check names before writing any verifier code.
+
+---
+
+## Phase 2: Environment and World Setup
+
+### Glossary
+- **Principle of Least Privilege (in Evals):** Running the agent as an unprivileged OS user (`agent`, UID 1000) so it cannot tamper with system-level files or escape task boundaries.
+- **Runtime Test Injection:** Harbor's security pattern of keeping `tests/` and `solution/` out of the Docker image during the agent phase, injecting `tests/` only when verification begins.
+
+### What We Built and Why
+We implemented the task sandbox inside `tasks/offboard-departed-employee/`. We wrote the seed CSV files and policy in `environment/data/`, created the agent prompt in `instruction.md`, and authored a non-root `Dockerfile` based on `python:3.12-slim-bookworm`. Finally, we proved via `docker run` that the container runs as `agent` and that neither `/tests` nor `/solution` exist in the image while the agent works.
