@@ -14,5 +14,7 @@ verify-results:
 
 check: selftest verify-results
 
+ATTEMPTS ?= 1
+
 run-agent:
-	harbor run -c job_config.yaml
+	harbor run -c job_config.yaml -k $(ATTEMPTS) -n 1 --ak max_turns=15

@@ -71,3 +71,14 @@ We proved the verifier is robust and the task is solvable before running any AI 
 
 ### What We Built and Why
 We established model credential templates in `.env.example` and pre-flight connectivity verification in `scripts/test_model_call.py`. We enforced network isolation inside the container with `network_mode = "no-network"` in `task.toml`. We executed live agent evaluations using Harbor's `terminus-2` agent. The agent scored a full 1.0 reward (passing all 10 checks) in an air-gapped run using Gemini Flash. When testing open models on Groq, we identified provider-level token-per-minute limits and configured native Harbor job retries. We documented the single completed trial sample honestly in the Plan Change Log, scanned all saved trajectories for leaked API keys using `scripts/scan_trajectories.py`, archived sanitized trajectories in `results/trajectories/`, and generated our evaluation summary in `results/RESULTS.md` using `scripts/check_results.py`.
+
+---
+
+## Phase 6: Failure Analysis
+
+### Glossary
+- **Failure Taxonomy:** A standardized classification schema that groups evaluation failures by root cause (e.g. behavioral task errors vs. operational infrastructure errors) rather than simple scalar pass/fail scores.
+- **Near-Miss Auditing:** Reviewing passing trajectories for suboptimal commands, missing tool failures, or risky patterns that could cause failures under different environment conditions.
+
+### What We Built and Why
+We created `analysis/FAILURES.md` to classify benchmark failure modes and analyze recorded agent trajectories. We audited the passing trial (`gemini_flash_pass_trial.json`), verifying that the agent deliberately avoided the lookalike user trap, preserved audit history, checked newline line endings via binary file inspection, and gracefully recovered when the `file` utility was missing in Debian slim. We also audited the rate-limited trial (`groq_qwen_ratelimit_trial.json`), proving that the agent implemented the correct state mutations, but crashed during the final handshake because accumulated multi-turn prompt tokens exceeded Groq's 7,000 ITPM rate limit. This confirmed the value of state-based grading over conversational parsing.

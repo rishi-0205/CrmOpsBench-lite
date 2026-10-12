@@ -155,7 +155,7 @@ Since Windows does not ship with GNU Make by default, we have two options:
    - Selected sanitized trajectories will be scanned for keys, copied to `results/trajectories/`, and committed.
 
 7. **Phase 6 Evaluation Contingency:**
-   - If the agent passes all 3 trials: we inspect trajectories for near misses and risky commands, test with a weaker model, or add one harder trap. Phase 6 budget is 25 to 30 minutes.
+   - If the agent passes the evaluation trial: we inspect trajectories for near misses and risky commands, test with a weaker model, or add one harder trap. Phase 6 budget is 25 to 30 minutes.
 
 ---
 
@@ -338,7 +338,7 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 ---
 
 ### Phase 5: Agent Runs and Metrics Summary (Budget: 25 min)
-**Done when:** Model key is verified via tiny direct call (Step 5.0), 1 trial attempt runs and verifies cost, `no-network` is tested in a live trial, 3 trials run via `-k 3`, trajectories are scanned for leaked keys, selected sanitized trajectories are copied to `results/trajectories/`, and `scripts/check_results.py` produces `results/RESULTS.md`; committed and pushed.
+**Done when:** Model key is verified via tiny direct call (Step 5.0), 1 trial attempt runs and verifies cost, `no-network` is tested in a live trial, evaluation trial runs and is evaluated, trajectories are scanned for leaked keys, selected sanitized trajectories are copied to `results/trajectories/`, and `scripts/check_results.py` produces `results/RESULTS.md`; committed and pushed.
 - [x] Step 5.0: Choose model, test API key and custom headers with a tiny direct script call before using Harbor.
 - [x] Step 5.1: Create `.env.example` and set up local `.env` with verified credentials.
 - [x] Step 5.2: Configure `Makefile` target `run-agent`.
@@ -354,11 +354,11 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 
 ### Phase 6: Failure Analysis (Budget: 25 to 30 min)
 **Done when:** `analysis/FAILURES.md` has our failure taxonomy, user inspects actual agent trajectories, records observations, logs coaching takeaways, and contingency is executed if agent passed all trials; committed and pushed.
-- [ ] Step 6.1: Initialize `analysis/FAILURES.md` with failure taxonomy.
-- [ ] Step 6.2: Inspect agent execution trajectories step by step.
-- [ ] Step 6.3: Coach user through recording observations, categorizing failures, and logging takeaways.
-- [ ] Step 6.4: Execute contingency if all trials passed (inspect near misses, test weaker model, or add harder trap).
-- [ ] Step 6.5: docs/LEARNING_NOTES.md Phase 6 summary ("what we built and why"), propose commit, commit, and push.
+- [x] Step 6.1: Initialize `analysis/FAILURES.md` with failure taxonomy.
+- [x] Step 6.2: Inspect agent execution trajectories step by step.
+- [x] Step 6.3: Coach user through recording observations, categorizing failures, and logging takeaways.
+- [x] Step 6.4: Execute contingency if all trials passed (inspect near misses, test weaker model, or add harder trap).
+- [x] Step 6.5: docs/LEARNING_NOTES.md Phase 6 summary ("what we built and why"), propose commit, commit, and push.
 
 ---
 
@@ -367,7 +367,7 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 - [ ] Step 7.1: Add `LICENSE` (MIT).
 - [ ] Step 7.2: Create `.github/workflows/ci.yml` (runs lint and verifier self-tests using `requirements-ci.txt`).
 - [ ] Step 7.3: Run `ruff check` and fix any formatting or lint issues.
-- [ ] Step 7.4: Write comprehensive, authentic `README.md` with real results and Limitations section (one task, 3 attempts, one model, first eval project built to learn).
+- [ ] Step 7.4: Write comprehensive, authentic `README.md` with real results and Limitations section (one task, single evaluation trial due to free-tier rate limits, one model, first eval project built to learn).
 - [ ] Step 7.5: User writes Phase 7 summary and a 2-minute verbal walkthrough of the project in `docs/LEARNING_NOTES.md`.
 - [ ] Step 7.6: Confirm `git status` is clean, propose commit message, commit, and push.
 
@@ -379,3 +379,4 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 | - | - | - | - |
 | Baseline | All | Master Plan established | Initial alignment on tasks, contracts, and constraints |
 | 2026-10-12 | Phase 5 / Step 5.5 | Skip 3-attempt run and use single completed trial | Free-tier rate limits make multi-trial runs infeasible; sample stated honestly in README |
+| 2026-10-12 | Cross-Phase Consistency | Align codebase with single-run decision across Makefile, scripts, results, and plan docs | Replaced hardcoded 3-attempt assumptions with dynamic sample counting, separated error vs reward-0 trials, and parameterized Makefile |

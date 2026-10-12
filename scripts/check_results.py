@@ -33,6 +33,11 @@ def parse_trial_dir(trial_dir: Path) -> dict[str, Any] | None:
         agent_info.get("name")
         or config.get("agent", {}).get("name", "unknown")
     )
+    model_name = (
+        agent_info.get("model_name")
+        or config.get("agent", {}).get("model_name")
+        or "unknown"
+    )
     trial_name = data.get("trial_name", trial_dir.name)
     verifier_result = data.get("verifier_result") or {}
     rewards = verifier_result.get("rewards") or {} if isinstance(verifier_result, dict) else {}
@@ -51,6 +56,7 @@ def parse_trial_dir(trial_dir: Path) -> dict[str, Any] | None:
     return {
         "trial_name": trial_name,
         "agent": agent_name,
+        "model": model_name,
         "reward": float(reward) if reward is not None else 0.0,
         "exception": exception,
         "checks": checks,
@@ -96,20 +102,49 @@ def collect_all_jobs(jobs_root: Path) -> list[dict[str, Any]]:
     return jobs
 
 
+def get_trial_status(trial: dict[str, Any]) -> tuple[str, str]:
+    """Returns (status_label, details_label)."""
+    exc = trial.get("exception")
+    if exc:
+        exc_type = exc.get("exception_type", "Error") if isinstance(exc, dict) else "Error"
+        return f"ERROR ({exc_type})", "Trial hit an unhandled exception or rate limit"
+
+    reward = trial.get("reward", 0.0)
+    checks = trial.get("checks", {})
+    if reward == 1.0:
+        return "PASS", f"{len(checks)}/10 checks passed" if checks else "Reward 1.0"
+    else:
+        passed = sum(1 for v in checks.values() if v)
+        total = len(checks) if checks else 10
+        return "FAIL (Reward 0.0)", f"{passed}/{total} checks passed"
+
+
 def generate_markdown_summary(jobs: list[dict[str, Any]]) -> str:
+    all_trials = [t for j in jobs for t in j["trials"]]
+    total_count = len(all_trials)
+    pass_count = sum(1 for t in all_trials if not t.get("exception") and t.get("reward") == 1.0)
+    fail_count = sum(1 for t in all_trials if not t.get("exception") and t.get("reward") != 1.0)
+    error_count = sum(1 for t in all_trials if t.get("exception"))
+
     lines = [
         "# Evaluation Results Summary",
         "",
-        "| Job / Timestamp | Agent | Trial Name | Reward | Pass / Fail |",
-        "| --- | --- | --- | --- | --- |",
+        f"- **Total Sample Size:** {total_count} trial(s) across {len(jobs)} job(s)",
+        f"- **Outcome Counts:** {pass_count}/{total_count} passed, {fail_count}/{total_count} failed (reward 0.0), {error_count}/{total_count} errored",
+        "",
+        "> Note: For small evaluation samples, results are reported as exact counts rather than percentage estimates.",
+        "",
+        "| Job / Timestamp | Agent | Model | Trial Name | Reward | Status | Details |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
     ]
 
     for job in jobs:
         timestamp = job["job_dir"].name
         for trial in job["trials"]:
-            status = "PASS" if trial["reward"] == 1.0 else "FAIL"
+            status_label, details_label = get_trial_status(trial)
+            reward_str = f"{trial['reward']:.1f}"
             lines.append(
-                f"| `{timestamp}` | `{trial['agent']}` | `{trial['trial_name']}` | `{trial['reward']}` | {status} |"
+                f"| `{timestamp}` | `{trial['agent']}` | `{trial.get('model', '-')}` | `{trial['trial_name']}` | `{reward_str}` | **{status_label}** | {details_label} |"
             )
 
     lines.append("")
@@ -142,31 +177,40 @@ def main() -> int:
         print(f"No completed jobs found in {args.jobs_dir}")
         return 1
 
-    print(f"Found {len(jobs)} jobs in {args.jobs_dir}:")
+    all_trials = [t for j in jobs for t in j["trials"]]
+    total_count = len(all_trials)
+    pass_count = sum(1 for t in all_trials if not t.get("exception") and t.get("reward") == 1.0)
+    fail_count = sum(1 for t in all_trials if not t.get("exception") and t.get("reward") != 1.0)
+    error_count = sum(1 for t in all_trials if t.get("exception"))
+
+    print(f"Found {len(jobs)} jobs ({total_count} total trials) in {args.jobs_dir}:")
+    print(f"  Sample summary: {pass_count}/{total_count} passed, {fail_count}/{total_count} failed, {error_count}/{total_count} errored\n")
+
     latest_oracle_reward: float | None = None
     latest_nop_reward: float | None = None
 
     for job in jobs:
-        print(f"\nJob: {job['job_dir'].name}")
+        print(f"Job: {job['job_dir'].name}")
         for trial in job["trials"]:
+            status_label, details_label = get_trial_status(trial)
             print(
-                f"  Agent: {trial['agent']} | Trial: {trial['trial_name']} | Reward: {trial['reward']}"
+                f"  Agent: {trial['agent']} | Model: {trial.get('model')} | Trial: {trial['trial_name']} | Reward: {trial['reward']} | Status: {status_label}"
             )
             if trial["checks"]:
                 for cname, cpass in trial["checks"].items():
                     mark = "OK" if cpass else "FAIL"
                     print(f"    [{mark}] {cname}")
 
-            if trial["agent"] == "oracle":
+            if trial["agent"] == "oracle" and not trial.get("exception"):
                 latest_oracle_reward = trial["reward"]
-            elif trial["agent"] == "nop":
+            elif trial["agent"] == "nop" and not trial.get("exception"):
                 latest_nop_reward = trial["reward"]
 
     if args.output_md:
         md_text = generate_markdown_summary(jobs)
         args.output_md.parent.mkdir(parents=True, exist_ok=True)
         args.output_md.write_text(md_text, encoding="utf-8")
-        print(f"\nWrote summary to {args.output_md}")
+        print(f"\nWrote summary to {args.output_md} (Sample size: {total_count} trial(s))")
 
     if args.assert_baselines:
         print("\nAsserting baselines:")
