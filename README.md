@@ -107,7 +107,7 @@ Copy-Item .env.example .env
 
 **Bash (macOS / Linux)**
 ```bash
-git clone https://github.com/rishi-0205/CrmOpsBench-lite
+git clone https://github.com/rishi-0205/CrmOpsBench-lite.git
 cd CrmOpsBench-lite
 python3 -m venv .venv
 source .venv/bin/activate
