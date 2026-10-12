@@ -156,7 +156,8 @@ def check_no_collateral_changes(data_dir: Path, seed_dir: Path) -> bool:
     current_users = read_users(data_dir)
     seed_users = read_users(seed_dir)
 
-    # All users except departed Priya (covered by user_row_kept) and lookalike Priya (covered by check 8)
+    # All users except departed Priya (covered by user_row_kept)
+    # and lookalike Priya (covered by check 8)
     cur_user_keys = set(current_users.keys()) - {DEPARTED_USER_ID, LOOKALIKE_USER_ID}
     seed_user_keys = set(seed_users.keys()) - {DEPARTED_USER_ID, LOOKALIKE_USER_ID}
     if cur_user_keys != seed_user_keys:

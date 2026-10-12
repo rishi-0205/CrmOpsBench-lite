@@ -31,6 +31,7 @@ def main() -> int:
 
     import json
     import urllib.request
+
     import litellm
 
     print("Fetching active Groq models from API...")

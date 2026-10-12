@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import csv
 import json
-import os
 import shutil
 from pathlib import Path
-import pytest
 
-from checks import main as verifier_main, run_checks
+import pytest
+from checks import main as verifier_main
+from checks import run_checks
 
 
 def _rewrite_csv(path: Path, rows: list[dict[str, str]], fieldnames: list[str]) -> None:

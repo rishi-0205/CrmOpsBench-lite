@@ -130,9 +130,16 @@ def generate_markdown_summary(jobs: list[dict[str, Any]]) -> str:
         "# Evaluation Results Summary",
         "",
         f"- **Total Sample Size:** {total_count} trial(s) across {len(jobs)} job(s)",
-        f"- **Outcome Counts:** {pass_count}/{total_count} passed, {fail_count}/{total_count} failed (reward 0.0), {error_count}/{total_count} errored",
+        (
+            f"- **Outcome Counts:** {pass_count}/{total_count} passed, "
+            f"{fail_count}/{total_count} failed (reward 0.0), "
+            f"{error_count}/{total_count} errored"
+        ),
         "",
-        "> Note: For small evaluation samples, results are reported as exact counts rather than percentage estimates.",
+        (
+            "> Note: For small evaluation samples, results are reported as exact counts "
+            "rather than percentage estimates."
+        ),
         "",
         "| Job / Timestamp | Agent | Model | Trial Name | Reward | Status | Details |",
         "| --- | --- | --- | --- | --- | --- | --- |",
@@ -143,8 +150,12 @@ def generate_markdown_summary(jobs: list[dict[str, Any]]) -> str:
         for trial in job["trials"]:
             status_label, details_label = get_trial_status(trial)
             reward_str = f"{trial['reward']:.1f}"
+            agent = trial['agent']
+            model = trial.get('model', '-')
+            tname = trial['trial_name']
             lines.append(
-                f"| `{timestamp}` | `{trial['agent']}` | `{trial.get('model', '-')}` | `{trial['trial_name']}` | `{reward_str}` | **{status_label}** | {details_label} |"
+                f"| `{timestamp}` | `{agent}` | `{model}` | `{tname}` | "
+                f"`{reward_str}` | **{status_label}** | {details_label} |"
             )
 
     lines.append("")
@@ -184,7 +195,10 @@ def main() -> int:
     error_count = sum(1 for t in all_trials if t.get("exception"))
 
     print(f"Found {len(jobs)} jobs ({total_count} total trials) in {args.jobs_dir}:")
-    print(f"  Sample summary: {pass_count}/{total_count} passed, {fail_count}/{total_count} failed, {error_count}/{total_count} errored\n")
+    print(
+        f"  Sample summary: {pass_count}/{total_count} passed, "
+        f"{fail_count}/{total_count} failed, {error_count}/{total_count} errored\n"
+    )
 
     latest_oracle_reward: float | None = None
     latest_nop_reward: float | None = None
@@ -194,7 +208,8 @@ def main() -> int:
         for trial in job["trials"]:
             status_label, details_label = get_trial_status(trial)
             print(
-                f"  Agent: {trial['agent']} | Model: {trial.get('model')} | Trial: {trial['trial_name']} | Reward: {trial['reward']} | Status: {status_label}"
+                f"  Agent: {trial['agent']} | Model: {trial.get('model')} | "
+                f"Trial: {trial['trial_name']} | Reward: {trial['reward']} | Status: {status_label}"
             )
             if trial["checks"]:
                 for cname, cpass in trial["checks"].items():

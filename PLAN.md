@@ -166,16 +166,12 @@ offboarding-bench/
 ├── .env.example
 ├── .gitattributes            (* text=auto eol=lf)
 ├── .gitignore
-├── .github/
-│   └── workflows/
-│       └── ci.yml            (runs lint and verifier self-tests using requirements-ci.txt)
 ├── LICENSE                   (MIT License)
 ├── Makefile                  (plain single-command recipes, prerequisite-based check)
 ├── PLAN.md
 ├── pyproject.toml            (ruff and pytest config, created in Step 3.0)
 ├── README.md
 ├── requirements-dev.txt      (pinned harbor, pytest, ruff, created in Phase 0)
-├── requirements-ci.txt       (pinned pytest, ruff only, created in Phase 0)
 ├── analysis/
 │   └── FAILURES.md
 ├── docs/
@@ -362,14 +358,13 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 
 ---
 
-### Phase 7: Polish, README, CI, and Final Push (Budget: 20 min)
-**Done when:** `LICENSE` (MIT) and `requirements-ci.txt` are present, CI workflow is green on GitHub, `ruff check` is clean, README has authentic metrics, findings, and Limitations section, user writes 2-minute verbal walkthrough in `LEARNING_NOTES.md`, and final clean commit is pushed.
-- [ ] Step 7.1: Add `LICENSE` (MIT).
-- [ ] Step 7.2: Create `.github/workflows/ci.yml` (runs lint and verifier self-tests using `requirements-ci.txt`).
-- [ ] Step 7.3: Run `ruff check` and fix any formatting or lint issues.
-- [ ] Step 7.4: Write comprehensive, authentic `README.md` with real results and Limitations section (one task, single evaluation trial due to free-tier rate limits, one model, first eval project built to learn).
-- [ ] Step 7.5: User writes Phase 7 summary and a 2-minute verbal walkthrough of the project in `docs/LEARNING_NOTES.md`.
-- [ ] Step 7.6: Confirm `git status` is clean, propose commit message, commit, and push.
+### Phase 7: Polish, README, and Final Push (Budget: 20 min)
+**Done when:** `LICENSE` (MIT) is present, `ruff check` is clean, README has authentic metrics, findings, Limitations, and How to run sections, user writes 2-minute verbal walkthrough in `LEARNING_NOTES.md`, and final clean commit is pushed.
+- [x] Step 7.1: Add `LICENSE` (MIT).
+- [x] Step 7.2: Run `ruff check` and fix any formatting or lint issues.
+- [x] Step 7.3: Write comprehensive, authentic `README.md` with real results, Limitations, and How to run sections.
+- [x] Step 7.4: User writes Phase 7 summary and a 2-minute verbal walkthrough of the project in `docs/LEARNING_NOTES.md`.
+- [x] Step 7.5: Confirm `git status` is clean, propose commit message, commit, and push.
 
 ---
 
@@ -380,3 +375,4 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 | Baseline | All | Master Plan established | Initial alignment on tasks, contracts, and constraints |
 | 2026-10-12 | Phase 5 / Step 5.5 | Skip 3-attempt run and use single completed trial | Free-tier rate limits make multi-trial runs infeasible; sample stated honestly in README |
 | 2026-10-12 | Cross-Phase Consistency | Align codebase with single-run decision across Makefile, scripts, results, and plan docs | Replaced hardcoded 3-attempt assumptions with dynamic sample counting, separated error vs reward-0 trials, and parameterized Makefile |
+| 2026-10-12 | Phase 7 | Skip GitHub Actions CI workflow and remove requirements-ci.txt | Keep verification local via ruff check and pytest; record CI as next step in README |

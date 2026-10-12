@@ -82,3 +82,26 @@ We established model credential templates in `.env.example` and pre-flight conne
 
 ### What We Built and Why
 We created `analysis/FAILURES.md` to classify benchmark failure modes and analyze recorded agent trajectories. We audited the passing trial (`gemini_flash_pass_trial.json`), verifying that the agent deliberately avoided the lookalike user trap, preserved audit history, checked newline line endings via binary file inspection, and gracefully recovered when the `file` utility was missing in Debian slim. We also audited the rate-limited trial (`groq_qwen_ratelimit_trial.json`), proving that the agent implemented the correct state mutations, but crashed during the final handshake because accumulated multi-turn prompt tokens exceeded Groq's 7,000 ITPM rate limit. This confirmed the value of state-based grading over conversational parsing.
+
+---
+
+## Phase 7: Polish, README, and Final Push
+
+### Key Concepts Added
+- **State-Based Benchmark Soundness:** Ensuring that benchmark evaluations do not depend on conversational output or agent claims, but solely on deterministic verifications of post-run disk state.
+- **Reproducibility Contract:** Providing exact, tested shell commands alongside Makefile targets so researchers can reproduce baselines and agent runs on any platform.
+- **Fail-Closed Verification:** Graders that strictly fail with reward 0.0 if any required resource is missing, unreadable, or malformed, preventing accidental passes.
+
+### What We Built and Why
+We finalized `offboarding-bench` as a complete, transparent evaluation portfolio piece. We added an MIT `LICENSE`, cleaned all linting errors via `ruff check`, and authored a comprehensive `README.md`. The README presents honest sample metrics (1 attempt, 1 model, 1 task) due to provider free-tier rate limits, documents the exact trajectory commands executed by Gemini Flash, and specifies both verified and unverified isolation boundaries. We also established a dual-track "How to run" guide supporting PowerShell and macOS/Linux with verified Makefile targets.
+
+### 2-Minute Verbal Walkthrough
+
+> "This project is `offboarding-bench`, a deterministic evaluation benchmark for AI coding and operations agents.
+>
+> The problem it tests is enterprise offboarding. When an employee departs, an agent must update four relational CSV files in a sandboxed container: disable the user account without deleting the record, remove all group memberships, clear software licenses, and reassign owned groups to their direct manager. The environment includes intentional traps, including an active coworker who shares the exact same name, strict compliance rules requiring historical record retention, and air-gapped network isolation.
+>
+> What makes this benchmark robust is how grading works. Rather than evaluating LLM output with another LLM or parsing conversational chat, grading is purely state-based. A Python verifier runs inside the container and tests the filesystem against 10 explicit checks. To prove the verifier itself is sound, we wrote 16 automated self-tests across 10 mutation scenarios, confirming that specific agent errors produce exact derived sets of failing checks, and validated reference oracle (1.0) and no-op (0.0) baselines.
+>
+> When we ran `gemini/gemini-flash-latest` via the Harbor framework, the agent scored a perfect 1.0 in 2 minutes and 11 seconds. The trajectory showed interesting behavior: the agent deliberately avoided the lookalike user, used binary file reads to preserve Unix line endings, authored defensive Python assertions, and gracefully recovered when a diagnostic shell tool was missing from the container. We also observed provider rate limits on multi-turn rollouts, reinforcing why benchmarking harnesses must account for token accumulation during evaluation."
+

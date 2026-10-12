@@ -1,4 +1,4 @@
-.PHONY: selftest oracle nop verify-results check run-agent
+.PHONY: selftest oracle nop verify-results check summary run-agent
 
 selftest:
 	pytest
@@ -14,7 +14,11 @@ verify-results:
 
 check: selftest verify-results
 
+summary:
+	python scripts/check_results.py --output-md results/RESULTS.md
+
 ATTEMPTS ?= 1
 
 run-agent:
 	harbor run -c job_config.yaml -k $(ATTEMPTS) -n 1 --ak max_turns=15
+

@@ -1,7 +1,7 @@
 # Evaluation Results Summary
 
-- **Total Sample Size:** 11 trial(s) across 11 job(s)
-- **Outcome Counts:** 3/11 passed, 1/11 failed (reward 0.0), 7/11 errored
+- **Total Sample Size:** 13 trial(s) across 13 job(s)
+- **Outcome Counts:** 4/13 passed, 2/13 failed (reward 0.0), 7/13 errored
 
 > Note: For small evaluation samples, results are reported as exact counts rather than percentage estimates.
 
@@ -18,3 +18,5 @@
 | `2026-10-12__00-31-53` | `terminus-2` | `groq/qwen/qwen3.8-27b` | `offboard-departed-employee__kPVjWzo` | `0.0` | **ERROR (RateLimitError)** | Trial hit an unhandled exception or rate limit |
 | `2026-10-12__01-06-56` | `terminus-2` | `groq/qwen/qwen3.8-27b` | `offboard-departed-employee__SkCCMPc` | `0.0` | **ERROR (CancelledError)** | Trial hit an unhandled exception or rate limit |
 | `2026-10-12__16-56-14` | `terminus-2` | `groq/qwen/qwen3.8-27b` | `offboard-departed-employee__VNf96dV` | `0.0` | **ERROR (RateLimitError)** | Trial hit an unhandled exception or rate limit |
+| `2026-10-12__17-31-39` | `nop` | `unknown` | `offboard-departed-employee__5v24yUt` | `0.0` | **FAIL (Reward 0.0)** | 6/10 checks passed |
+| `2026-10-12__17-32-14` | `oracle` | `unknown` | `offboard-departed-employee__CDMUgEF` | `1.0` | **PASS** | 10/10 checks passed |
