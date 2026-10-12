@@ -1,4 +1,4 @@
-.PHONY: selftest oracle nop verify-results check
+.PHONY: selftest oracle nop verify-results check run-agent
 
 selftest:
 	pytest
@@ -13,3 +13,6 @@ verify-results:
 	python scripts/check_results.py --assert-baselines
 
 check: selftest verify-results
+
+run-agent:
+	harbor run -c job_config.yaml

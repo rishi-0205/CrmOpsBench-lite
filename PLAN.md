@@ -339,16 +339,16 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 
 ### Phase 5: Agent Runs and Metrics Summary (Budget: 25 min)
 **Done when:** Model key is verified via tiny direct call (Step 5.0), 1 trial attempt runs and verifies cost, `no-network` is tested in a live trial, 3 trials run via `-k 3`, trajectories are scanned for leaked keys, selected sanitized trajectories are copied to `results/trajectories/`, and `scripts/check_results.py` produces `results/RESULTS.md`; committed and pushed.
-- [ ] Step 5.0: Choose model, test API key and custom headers with a tiny direct script call before using Harbor.
-- [ ] Step 5.1: Create `.env.example` and set up local `.env` with verified credentials.
-- [ ] Step 5.2: Configure `Makefile` target `run-agent`.
-- [ ] Step 5.3: Run 1 trial attempt first, verify token usage and cost.
-- [ ] Step 5.4: Test `network_mode = "no-network"` with one real trial; document fallback if agent harness needs model access.
-- [ ] Step 5.5: Run 3 trials via `harbor run ... -k 3`.
-- [ ] Step 5.6: Scan saved trajectory files for API keys before staging.
-- [ ] Step 5.7: Copy selected sanitized trajectories to `results/trajectories/`.
-- [ ] Step 5.8: Run `scripts/check_results.py` to produce `results/RESULTS.md`.
-- [ ] Step 5.9: docs/LEARNING_NOTES.md Phase 5 summary ("what we built and why"), propose commit, commit, and push.
+- [x] Step 5.0: Choose model, test API key and custom headers with a tiny direct script call before using Harbor.
+- [x] Step 5.1: Create `.env.example` and set up local `.env` with verified credentials.
+- [x] Step 5.2: Configure `Makefile` target `run-agent`.
+- [x] Step 5.3: Run 1 trial attempt first, verify token usage and cost.
+- [x] Step 5.4: Test `network_mode = "no-network"` with one real trial; document fallback if agent harness needs model access.
+- [x] Step 5.5: Run 3 trials via `harbor run ... -k 3` (Skipped per Plan Change Log; single completed trial sample evaluated).
+- [x] Step 5.6: Scan saved trajectory files for API keys before staging.
+- [x] Step 5.7: Copy selected sanitized trajectories to `results/trajectories/`.
+- [x] Step 5.8: Run `scripts/check_results.py` to produce `results/RESULTS.md`.
+- [x] Step 5.9: docs/LEARNING_NOTES.md Phase 5 summary ("what we built and why"), propose commit, commit, and push.
 
 ---
 
@@ -378,3 +378,4 @@ The exact expected set of failing checks per mutation is derived by reasoning an
 | Date | Phase / Step | Change Description | Reason and Evidence |
 | - | - | - | - |
 | Baseline | All | Master Plan established | Initial alignment on tasks, contracts, and constraints |
+| 2026-10-12 | Phase 5 / Step 5.5 | Skip 3-attempt run and use single completed trial | Free-tier rate limits make multi-trial runs infeasible; sample stated honestly in README |

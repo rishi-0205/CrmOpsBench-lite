@@ -16,6 +16,7 @@ user = "root"
 [agent]
 timeout_sec = 300.0
 user = "agent"
+network_mode = "no-network"
 
 [environment]
 build_timeout_sec = 600.0

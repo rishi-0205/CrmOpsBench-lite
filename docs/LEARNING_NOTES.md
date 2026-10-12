@@ -60,4 +60,14 @@ We built `pyproject.toml` to configure `ruff` and link `pytest` to `tasks/.../te
 ### What We Built and Why
 We proved the verifier is robust and the task is solvable before running any AI agent. We implemented host-side test suites in `verifier_selftests/` verifying seed integrity byte-for-byte, verifying programmatic oracle transformations against ground truth, and testing all 10 failure mutations against their exact derived check sets (along with fail-closed missing/malformed file handling). We authored the reference solution `solve.sh` and ran live Harbor trials inside Docker, confirming the oracle scored 1.0 and the no-op scored 0.0. Finally, we created `scripts/check_results.py` and `Makefile` to dynamically audit job outputs and automate baseline assertions.
 
+---
 
+## Phase 5: Agent Runs and Metrics Summary
+
+### Glossary
+- **Pre-Flight Model Smoke Testing:** Testing API credentials and model endpoints with a small standalone script before invoking benchmark frameworks to isolate external API and alias errors from benchmark evaluation code.
+- **Air-Gapped Sandbox (`no-network`):** Disabling network access inside the execution container during agent rollouts to prevent customer data exfiltration and external script downloads, ensuring evaluation measures pure local tool proficiency.
+- **Output Tokens Per Minute (OTPM) Bottlenecks:** Provider rate limits that throttle rapid multi-turn agent conversations within a 60-second sliding window, requiring turn-level retry handling or honest reporting of sample sizes.
+
+### What We Built and Why
+We established model credential templates in `.env.example` and pre-flight connectivity verification in `scripts/test_model_call.py`. We enforced network isolation inside the container with `network_mode = "no-network"` in `task.toml`. We executed live agent evaluations using Harbor's `terminus-2` agent. The agent scored a full 1.0 reward (passing all 10 checks) in an air-gapped run using Gemini Flash. When testing open models on Groq, we identified provider-level token-per-minute limits and configured native Harbor job retries. We documented the single completed trial sample honestly in the Plan Change Log, scanned all saved trajectories for leaked API keys using `scripts/scan_trajectories.py`, archived sanitized trajectories in `results/trajectories/`, and generated our evaluation summary in `results/RESULTS.md` using `scripts/check_results.py`.

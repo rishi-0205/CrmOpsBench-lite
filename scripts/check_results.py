@@ -27,12 +27,16 @@ def parse_trial_dir(trial_dir: Path) -> dict[str, Any] | None:
     except Exception:
         return None
 
+    agent_info = data.get("agent_info") or {}
+    config = data.get("config") or {}
     agent_name = (
-        data.get("agent_info", {}).get("name")
-        or data.get("config", {}).get("agent", {}).get("name", "unknown")
+        agent_info.get("name")
+        or config.get("agent", {}).get("name", "unknown")
     )
     trial_name = data.get("trial_name", trial_dir.name)
-    reward = data.get("verifier_result", {}).get("rewards", {}).get("reward", 0.0)
+    verifier_result = data.get("verifier_result") or {}
+    rewards = verifier_result.get("rewards") or {} if isinstance(verifier_result, dict) else {}
+    reward = rewards.get("reward", 0.0) if isinstance(rewards, dict) else 0.0
     exception = data.get("exception_info")
 
     checks_file = trial_dir / "verifier" / "checks.json"

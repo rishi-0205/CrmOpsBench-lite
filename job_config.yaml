@@ -1,0 +1,12 @@
+tasks:
+  - path: tasks/offboard-departed-employee
+
+agents:
+  - name: terminus-2
+    model_name: groq/qwen/qwen3.8-27b
+    kwargs:
+      llm_call_kwargs:
+        num_retries: 3
+
+retry:
+  max_retries: 0
